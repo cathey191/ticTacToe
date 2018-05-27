@@ -1,0 +1,15 @@
+.board{
+	align-self: center;
+ 	display: grid;
+ 	grid-template-columns: repeat(3, 20vh);
+ 	grid-template-rows: repeat(3, 20vh);
+	grid-column-gap: 1vh;
+	grid-row-gap: 1vh;
+ 	height: 62vh;
+ 	width: 62vh;
+	margin: auto;
+}
+.board div {
+	align-self: center;
+	text-align: center;
+}
