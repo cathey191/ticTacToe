@@ -1,15 +1,27 @@
 .board{
 	align-self: center;
  	display: grid;
+	grid-template-areas: 'zero one two' 'three four five' 'six seven eight';
  	grid-template-columns: repeat(3, 20vh);
  	grid-template-rows: repeat(3, 20vh);
-	grid-column-gap: 1vh;
-	grid-row-gap: 1vh;
- 	height: 62vh;
- 	width: 62vh;
+ 	height: 60vh;
+ 	width: 60vh;
 	margin: auto;
+	font-family: sans-serif;
 }
 .board div {
-	align-self: center;
-	text-align: center;
+	color: gray;
+  font-size: 16vh;
+  font-weight: bold;
+  line-height: 20vh;
+  text-align: center;
+  text-transform: uppercase;
+}
+.borderLR {
+	border-left: 2px solid black;
+	border-right: 2px solid black;
+}
+.borderTB {
+	border-top: 2px solid black;
+	border-bottom: 2px solid black;
 }
