@@ -8,7 +8,31 @@
 	</head>
 	<body>
 
-		<div class="board">
+		<div class="board displayNone" id="twoPlayer">
+			<div></div>
+			<div class="borderLR"></div>
+			<div></div>
+			<div class="borderTB"></div>
+			<div class="borderLR borderTB"></div>
+			<div class="borderTB"></div>
+			<div></div>
+			<div class="borderLR"></div>
+			<div></div>
+		</div>
+
+		<div class="board" id="easy">
+			<div></div>
+			<div class="borderLR"></div>
+			<div></div>
+			<div class="borderTB"></div>
+			<div class="borderLR borderTB"></div>
+			<div class="borderTB"></div>
+			<div></div>
+			<div class="borderLR"></div>
+			<div></div>
+		</div>
+
+		<div class="board displayNone" id="hard">
 			<div></div>
 			<div class="borderLR"></div>
 			<div></div>
@@ -22,6 +46,7 @@
 		<button type="button" name="button" id="reset">Reset Board</button>
 
 
+		<script src="js/data.js"></script>
 		<script src="js/script.js"></script>
 	</body>
 </html>

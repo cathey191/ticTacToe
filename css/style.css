@@ -1,21 +1,21 @@
-.board{
+.board {
 	align-self: center;
- 	display: grid;
+	display: grid;
 	grid-template-areas: 'zero one two' 'three four five' 'six seven eight';
- 	grid-template-columns: repeat(3, 20vh);
- 	grid-template-rows: repeat(3, 20vh);
- 	height: 60vh;
- 	width: 60vh;
+	grid-template-columns: repeat(3, 20vh);
+	grid-template-rows: repeat(3, 20vh);
+	height: 60vh;
+	width: 60vh;
 	margin: auto;
 	font-family: sans-serif;
 }
 .board div {
 	color: gray;
-  font-size: 16vh;
-  font-weight: bold;
-  line-height: 20vh;
-  text-align: center;
-  text-transform: uppercase;
+	font-size: 16vh;
+	font-weight: bold;
+	line-height: 20vh;
+	text-align: center;
+	text-transform: uppercase;
 }
 .borderLR {
 	border-left: 2px solid black;
@@ -24,4 +24,8 @@
 .borderTB {
 	border-top: 2px solid black;
 	border-bottom: 2px solid black;
+}
+
+.displayNone {
+	display: none;
 }
