@@ -11,55 +11,66 @@
 
 	// two player
 	function twoPlayer(e) {
-		if (e.target.parentNode.id === 'twoPlayer') {
-			// check the position
-			if (e.target.innerText === '') {
-				e.target.innerText = player;
+		// check the board and position
+		if (e.target.parentNode.id === 'twoPlayer' && e.target.innerText === '') {
+			e.target.innerText = player;
 
-				checkForWin(board, player);
+			checkForWin(board, player);
 
-				// reset player
-				if (player === 'O') {
-					player = 'X';
-				} else {
-					player = 'O';
-				}
+			// reset player
+			if (player === 'O') {
+				player = 'X';
+			} else {
+				player = 'O';
 			}
-
-			// checkForWin();
 		}
 	}
 
 	// easy
 	function easy(e) {
 		var board = e.target.parentNode;
-		if (board.id === 'easy') {
-			// check the position
-			if (e.target.innerText === '') {
-				e.target.innerText = player;
+		// check the board and position
+		if (board.id === 'easy' && e.target.innerText === '') {
+			e.target.innerText = player;
 
-				if (!checkForWin(board, player)) {
-					var randomNumber = Math.floor(Math.random() * 8);
-					while (!(board.children[randomNumber].innerText === '')) {
-						randomNumber = Math.floor(Math.random() * 8);
-					}
-					board.children[randomNumber].innerText = 'X';
+			// check is the board is full
+			var positionPlayed = [];
+			for (var i = 0; i < 8; i++) {
+				if (!(board.children[i].innerText === '')) {
+					positionPlayed.push('test');
 				}
+			}
+
+			// if the game is not won then second player
+			if (positionPlayed.length <= 6 || !checkForWin(board, player)) {
+				var randomNumber = Math.floor(Math.random() * 8);
+				// check the section of the board has not already been played
+				while (!(board.children[randomNumber].innerText === '')) {
+					randomNumber = Math.floor(Math.random() * 8);
+				}
+				board.children[randomNumber].innerText = 'X';
+				checkForWin(board, 'X');
 			}
 		}
 	}
 
+	// checks board for wins
 	function checkForWin(board, player) {
-		// console.log('pass');
+		// loops through the different ways to win
 		for (var i = 0; i < data.length; i++) {
+			// array to check how may pass
 			var pass = [];
+			// loops tho the different positions in the different ways to win
 			for (var j = 0; j < 3; j++) {
 				var position = data[i].position[j];
 				if (board.children[position].innerText === player) {
+					// adds items to the pass array
 					pass.push(position);
 				}
+				// if the array has a length of 3 equals win
 				if (pass.length === 3) {
 					console.log('pass');
+					return true;
 				}
 			}
 		}
