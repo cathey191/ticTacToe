@@ -40,7 +40,7 @@
 
 				if (!checkForWin(board, player)) {
 					var randomNumber = Math.floor(Math.random() * 8);
-					while (board.children[randomNumber].innerText === player) {
+					while (!(board.children[randomNumber].innerText === '')) {
 						randomNumber = Math.floor(Math.random() * 8);
 					}
 					board.children[randomNumber].innerText = 'X';
