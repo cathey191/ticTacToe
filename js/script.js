@@ -16,6 +16,8 @@
 			if (e.target.innerText === '') {
 				e.target.innerText = player;
 
+				checkForWin(board, player);
+
 				// reset player
 				if (player === 'O') {
 					player = 'X';
@@ -36,13 +38,12 @@
 			if (e.target.innerText === '') {
 				e.target.innerText = player;
 
-				checkForWin(board, player);
-
-				// reset player
-				if (player === 'O') {
-					player = 'X';
-				} else {
-					player = 'O';
+				if (!checkForWin(board, player)) {
+					var randomNumber = Math.floor(Math.random() * 8);
+					while (board.children[randomNumber].innerText === player) {
+						randomNumber = Math.floor(Math.random() * 8);
+					}
+					board.children[randomNumber].innerText = 'X';
 				}
 			}
 		}
