@@ -37,12 +37,12 @@
 			var positionPlayed = [];
 			for (var i = 0; i < 8; i++) {
 				if (!(board.children[i].innerText === '')) {
-					positionPlayed.push('test');
+					positionPlayed.push(i);
 				}
 			}
 
 			// if the game is not won then second player
-			if (positionPlayed.length <= 6 || !checkForWin(board, player)) {
+			if (!checkForWin(board, player) && positionPlayed.length < 8) {
 				var randomNumber = Math.floor(Math.random() * 8);
 				// check the section of the board has not already been played
 				while (!(board.children[randomNumber].innerText === '')) {
@@ -69,7 +69,7 @@
 				}
 				// if the array has a length of 3 equals win
 				if (pass.length === 3) {
-					console.log('pass');
+					console.log(player + ' Won!!');
 					return true;
 				}
 			}
