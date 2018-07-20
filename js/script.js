@@ -1,56 +1,56 @@
 (function() {
-	var board = document.querySelectorAll('.board');
-	var twoPeopleDom = document.querySelector('#twoPlayer');
-	var easyDom = document.querySelector('#easy');
-	var mediumDom = document.querySelector('#medium');
-	var hardDom = document.querySelector('#hard');
+	var board = document.querySelectorAll('.board')[0];
 	var resetButton = document.querySelector('#reset');
 	var player = 'O';
 
-	// twoPeopleDom.addEventListener('click', twoPlayer, false);
-	// easyDom.addEventListener('click', easy, false);
-	// mediumDom.addEventListener('click', medium, false);
-	hardDom.addEventListener('click', hard, false);
+	board.addEventListener('click', selectBoards, false);
 	resetButton.addEventListener('click', reset, false);
+
+	// check what level the board is
+	function selectBoards(e) {
+		if (e.target.parentNode.id === 'twoPlayer' && e.target.innerText === '') {
+			twoPlayer(e);
+		} else if (board.id === 'easy' && e.target.innerText === '') {
+			easy(e);
+		} else if (board.id === 'medium' && e.target.innerText === '') {
+			medium(e);
+		} else if (board.id === 'hard' && e.target.innerText === '') {
+			hard(e);
+		}
+	}
 
 	// two player
 	function twoPlayer(e) {
-		// check the board and position
-		if (e.target.parentNode.id === 'twoPlayer' && e.target.innerText === '') {
-			e.target.innerText = player;
+		e.target.innerText = player;
 
-			checkForWin(board, player);
+		checkForWin(board, player);
 
-			// reset player
-			if (player === 'O') {
-				player = 'X';
-			} else {
-				player = 'O';
-			}
+		// reset player
+		if (player === 'O') {
+			player = 'X';
+		} else {
+			player = 'O';
 		}
 	}
 
 	// easy
 	function easy(e) {
 		var board = e.target.parentNode;
-		// check the board and position
-		if (board.id === 'easy' && e.target.innerText === '') {
-			e.target.innerText = player;
+		e.target.innerText = player;
 
-			// check is the board is full
-			var positionPlayed = [];
-			for (var i = 0; i < 8; i++) {
-				if (!(board.children[i].innerText === '')) {
-					positionPlayed.push(i);
-				}
+		// check is the board is full
+		var positionPlayed = [];
+		for (var i = 0; i < 8; i++) {
+			if (!(board.children[i].innerText === '')) {
+				positionPlayed.push(i);
 			}
+		}
 
-			// if the game is not won or full, then second player
-			if (!checkForWin(board, player) && playedPositions(board).length < 8) {
-				var randomNumber = random(board, 8);
-				board.children[randomNumber].innerText = 'X';
-				checkForWin(board, 'X');
-			}
+		// if the game is not won or full, then second player
+		if (!checkForWin(board, player) && playedPositions(board).length < 8) {
+			var randomNumber = random(board, 8);
+			board.children[randomNumber].innerText = 'X';
+			checkForWin(board, 'X');
 		}
 	}
 
@@ -58,26 +58,23 @@
 	function medium(e) {
 		var board = e.target.parentNode;
 
-		// check the board and position
-		if (board.id === 'medium' && e.target.innerText === '') {
-			e.target.innerText = player;
+		e.target.innerText = player;
 
-			var played = playedPositions(board);
+		var played = playedPositions(board);
 
-			// check if it is the first round
-			if (played.length === 1) {
+		// check if it is the first round
+		if (played.length === 1) {
+			var randomNumber = random(board, 8);
+			board.children[randomNumber].innerText = 'X';
+			checkForWin(board, 'X');
+			// if the game is not won or full, then second player
+		} else if (!checkForWin(board, player) && played.length < 8) {
+			// if X can win, then win or if O is giong to win, then block
+			if (!blocking(board, 'X') && !blocking(board, player)) {
+				// else random
 				var randomNumber = random(board, 8);
 				board.children[randomNumber].innerText = 'X';
 				checkForWin(board, 'X');
-				// if the game is not won or full, then second player
-			} else if (!checkForWin(board, player) && played.length < 8) {
-				// if X can win, then win or if O is giong to win, then block
-				if (!blocking(board, 'X') && !blocking(board, player)) {
-					// else random
-					var randomNumber = random(board, 8);
-					board.children[randomNumber].innerText = 'X';
-					checkForWin(board, 'X');
-				}
 			}
 		}
 	}
@@ -86,40 +83,37 @@
 	function hard(e) {
 		var board = e.target.parentNode;
 
-		// check the board and position
-		if (board.id === 'hard' && e.target.innerText === '') {
-			e.target.innerText = player;
+		e.target.innerText = player;
 
-			var played = playedPositions(board);
-			var cornerPlayed = playedCorners(board);
+		var played = playedPositions(board);
+		var cornerPlayed = playedCorners(board);
 
-			// check if it is the first round
-			if (played.length === 1) {
+		// check if it is the first round
+		if (played.length === 1) {
+			var randomNumber = corners(board, 5);
+			board.children[randomNumber].innerText = 'X';
+			checkForWin(board, 'X');
+			// if the game is not won or full, then second player
+		} else if (!checkForWin(board, player) && played.length < 8) {
+			// if X can win, then win or if O is giong to win, then block
+			if (
+				!blocking(board, 'X') &&
+				!blocking(board, player) &&
+				cornerPlayed.length < 5
+			) {
+				// else random corner
 				var randomNumber = corners(board, 5);
 				board.children[randomNumber].innerText = 'X';
 				checkForWin(board, 'X');
-				// if the game is not won or full, then second player
-			} else if (!checkForWin(board, player) && played.length < 8) {
-				// if X can win, then win or if O is giong to win, then block
-				if (
-					!blocking(board, 'X') &&
-					!blocking(board, player) &&
-					cornerPlayed.length < 5
-				) {
-					// else random corner
-					var randomNumber = corners(board, 5);
-					board.children[randomNumber].innerText = 'X';
-					checkForWin(board, 'X');
-				} else if (
-					!blocking(board, 'X') &&
-					!blocking(board, player) &&
-					cornerPlayed.length === 5
-				) {
-					// else random
-					var randomNumber = random(board, 8);
-					board.children[randomNumber].innerText = 'X';
-					checkForWin(board, 'X');
-				}
+			} else if (
+				!blocking(board, 'X') &&
+				!blocking(board, player) &&
+				cornerPlayed.length === 5
+			) {
+				// else random
+				var randomNumber = random(board, 8);
+				board.children[randomNumber].innerText = 'X';
+				checkForWin(board, 'X');
 			}
 		}
 	}
