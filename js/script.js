@@ -1,20 +1,52 @@
 (function() {
 	var board = document.querySelectorAll('.board')[0];
 	var resetButton = document.querySelector('#reset');
+	var twoButton = document.querySelector('#buttonTwo');
+	var easyButton = document.querySelector('#buttonEasy');
+	var mediumButton = document.querySelector('#buttonMedium');
+	var hardButton = document.querySelector('#buttonHard');
 	var player = 'O';
 
 	board.addEventListener('click', selectBoards, false);
 	resetButton.addEventListener('click', reset, false);
+	twoButton.addEventListener('click', changeBoard, false);
+	easyButton.addEventListener('click', changeBoard, false);
+	mediumButton.addEventListener('click', changeBoard, false);
+	hardButton.addEventListener('click', changeBoard, false);
+
+	// change level of board
+	function changeBoard(e) {
+		var buttonID = e.target.id;
+		var title = document.querySelector('#title');
+
+		if (buttonID === 'buttonTwo') {
+			board.id = 'twoPlayer';
+			title.innerText = 'Two Player';
+		} else if (buttonID === 'buttonEasy') {
+			board.id = 'easy';
+			title.innerText = 'Easy';
+		} else if (buttonID === 'buttonMedium') {
+			board.id = 'medium';
+			title.innerText = 'Medium';
+		} else if (buttonID === 'buttonHard') {
+			board.id = 'hard';
+			title.innerText = 'Hard';
+		}
+		reset();
+	}
 
 	// check what level the board is
 	function selectBoards(e) {
 		if (e.target.parentNode.id === 'twoPlayer' && e.target.innerText === '') {
 			twoPlayer(e);
-		} else if (board.id === 'easy' && e.target.innerText === '') {
+		} else if (e.target.parentNode.id === 'easy' && e.target.innerText === '') {
 			easy(e);
-		} else if (board.id === 'medium' && e.target.innerText === '') {
+		} else if (
+			e.target.parentNode.id === 'medium' &&
+			e.target.innerText === ''
+		) {
 			medium(e);
-		} else if (board.id === 'hard' && e.target.innerText === '') {
+		} else if (e.target.parentNode.id === 'hard' && e.target.innerText === '') {
 			hard(e);
 		}
 	}
@@ -23,7 +55,7 @@
 	function twoPlayer(e) {
 		e.target.innerText = player;
 
-		checkForWin(board, player);
+		checkForWin(e.target.parentNode, player);
 
 		// reset player
 		if (player === 'O') {
@@ -35,7 +67,7 @@
 
 	// easy
 	function easy(e) {
-		var board = e.target.parentNode;
+		board = e.target.parentNode;
 		e.target.innerText = player;
 
 		// check is the board is full
@@ -56,7 +88,7 @@
 
 	// medium
 	function medium(e) {
-		var board = e.target.parentNode;
+		board = e.target.parentNode;
 
 		e.target.innerText = player;
 
@@ -81,7 +113,7 @@
 
 	// hard
 	function hard(e) {
-		var board = e.target.parentNode;
+		board = e.target.parentNode;
 
 		e.target.innerText = player;
 
@@ -96,20 +128,14 @@
 			// if the game is not won or full, then second player
 		} else if (!checkForWin(board, player) && played.length < 8) {
 			// if X can win, then win or if O is giong to win, then block
-			if (
-				!blocking(board, 'X') &&
-				!blocking(board, player) &&
-				cornerPlayed.length < 5
-			) {
+			if (blocking(board, 'X')) {
+			} else if (blocking(board, player)) {
+			} else if (cornerPlayed.length < 5) {
 				// else random corner
 				var randomNumber = corners(board, 5);
 				board.children[randomNumber].innerText = 'X';
 				checkForWin(board, 'X');
-			} else if (
-				!blocking(board, 'X') &&
-				!blocking(board, player) &&
-				cornerPlayed.length === 5
-			) {
+			} else if (cornerPlayed.length === 5) {
 				// else random
 				var randomNumber = random(board, 8);
 				board.children[randomNumber].innerText = 'X';
@@ -167,11 +193,12 @@
 	}
 
 	// block
-	function blocking(board, player) {
+	function blocking(board, play) {
 		var Oarray = [];
+		var value = false;
 
 		for (var i = 0; i < 8; i++) {
-			if (board.children[i].innerText === player) {
+			if (board.children[i].innerText === play) {
 				Oarray.push(i);
 			}
 		}
@@ -191,17 +218,18 @@
 				if (board.children[fail[0]].innerText === '') {
 					board.children[fail[0]].innerText = 'X';
 					checkForWin(board, 'X');
+					value = true;
 
-					return true;
 					// break loop
 					break;
 				}
 			}
 		}
+		return value;
 	}
 
 	// checks board for wins
-	function checkForWin(board, player) {
+	function checkForWin(board, play) {
 		// loops through the different ways to win
 		for (var i = 0; i < data.length; i++) {
 			// array to check how may pass
@@ -209,13 +237,13 @@
 			// loops tho the different positions in the different ways to win
 			for (var j = 0; j < 3; j++) {
 				var position = data[i].position[j];
-				if (board.children[position].innerText === player) {
+				if (board.children[position].innerText === play) {
 					// adds items to the pass array
 					pass.push(position);
 				}
 				// if the array has a length of 3 equals win
 				if (pass.length === 3) {
-					console.log(player + ' Won!!');
+					console.log(play + ' Won!!');
 					return true;
 				}
 			}
@@ -223,11 +251,9 @@
 	}
 
 	// reset/clear board
-	function reset(e) {
-		for (var i = 0; i < board.length; i++) {
-			for (var j = 0; j < board[i].children.length; j++) {
-				board[i].children[j].innerText = '';
-			}
+	function reset() {
+		for (var i = 0; i < board.children.length; i++) {
+			board.children[i].innerText = '';
 		}
 	}
 })();
