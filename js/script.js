@@ -9,8 +9,8 @@
 
 	// twoPeopleDom.addEventListener('click', twoPlayer, false);
 	// easyDom.addEventListener('click', easy, false);
-	mediumDom.addEventListener('click', medium, false);
-	// hardDom.addEventListener('click', hard, false);
+	// mediumDom.addEventListener('click', medium, false);
+	hardDom.addEventListener('click', hard, false);
 	resetButton.addEventListener('click', reset, false);
 
 	// two player
@@ -47,7 +47,7 @@
 
 			// if the game is not won or full, then second player
 			if (!checkForWin(board, player) && playedPositions(board).length < 8) {
-				var randomNumber = random(board);
+				var randomNumber = random(board, 8);
 				board.children[randomNumber].innerText = 'X';
 				checkForWin(board, 'X');
 			}
@@ -66,7 +66,7 @@
 
 			// check if it is the first round
 			if (played.length === 1) {
-				var randomNumber = random(board);
+				var randomNumber = random(board, 8);
 				board.children[randomNumber].innerText = 'X';
 				checkForWin(board, 'X');
 				// if the game is not won or full, then second player
@@ -74,7 +74,49 @@
 				// if X can win, then win or if O is giong to win, then block
 				if (!blocking(board, 'X') && !blocking(board, player)) {
 					// else random
-					var randomNumber = random(board);
+					var randomNumber = random(board, 8);
+					board.children[randomNumber].innerText = 'X';
+					checkForWin(board, 'X');
+				}
+			}
+		}
+	}
+
+	// hard
+	function hard(e) {
+		var board = e.target.parentNode;
+
+		// check the board and position
+		if (board.id === 'hard' && e.target.innerText === '') {
+			e.target.innerText = player;
+
+			var played = playedPositions(board);
+			var cornerPlayed = playedCorners(board);
+
+			// check if it is the first round
+			if (played.length === 1) {
+				var randomNumber = corners(board, 5);
+				board.children[randomNumber].innerText = 'X';
+				checkForWin(board, 'X');
+				// if the game is not won or full, then second player
+			} else if (!checkForWin(board, player) && played.length < 8) {
+				// if X can win, then win or if O is giong to win, then block
+				if (
+					!blocking(board, 'X') &&
+					!blocking(board, player) &&
+					cornerPlayed.length < 5
+				) {
+					// else random corner
+					var randomNumber = corners(board, 5);
+					board.children[randomNumber].innerText = 'X';
+					checkForWin(board, 'X');
+				} else if (
+					!blocking(board, 'X') &&
+					!blocking(board, player) &&
+					cornerPlayed.length === 5
+				) {
+					// else random
+					var randomNumber = random(board, 8);
 					board.children[randomNumber].innerText = 'X';
 					checkForWin(board, 'X');
 				}
@@ -94,12 +136,38 @@
 		return played;
 	}
 
-	// random position
-	function random(board) {
-		var randomNumber = Math.floor(Math.random() * 8);
+	// corners played
+	function playedCorners(board) {
+		// check is the board is full
+		var played = [];
+		for (var i = 0; i < corner.length; i++) {
+			if (!(board.children[i].innerText === '')) {
+				played.push(i);
+			}
+		}
+		return played;
+	}
+
+	// random empty corner
+	function corners(board, amount) {
+		var randomCorner = Math.floor(Math.random() * amount);
+		var cornerNumber = corner[randomCorner];
+
+		// check the section of the board has not already been played
+		while (!(board.children[cornerNumber].innerText === '')) {
+			randomCorner = Math.floor(Math.random() * amount);
+			cornerNumber = corner[randomCorner];
+		}
+		return cornerNumber;
+	}
+
+	// returns a random number that is empty on the board
+	function random(board, amount) {
+		var randomNumber = Math.floor(Math.random() * amount);
+
 		// check the section of the board has not already been played
 		while (!(board.children[randomNumber].innerText === '')) {
-			randomNumber = Math.floor(Math.random() * 8);
+			randomNumber = Math.floor(Math.random() * amount);
 		}
 		return randomNumber;
 	}
@@ -129,7 +197,9 @@
 				if (board.children[fail[0]].innerText === '') {
 					board.children[fail[0]].innerText = 'X';
 					checkForWin(board, 'X');
+
 					return true;
+					// break loop
 					break;
 				}
 			}

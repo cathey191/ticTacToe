@@ -24,3 +24,4 @@ var data = [
 		position: [2, 4, 6]
 	}
 ];
+var corner = [0, 2, 4, 6, 8];
