@@ -1,3 +1,11 @@
+.container {
+	width: 100vw;
+	max-width: 1000px;
+	height: 100vh;
+	text-align: center;
+	margin: 0 auto;
+}
+
 .board {
 	align-self: center;
 	display: grid;
